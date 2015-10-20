@@ -42,16 +42,19 @@ if !exists("Yapf(...)")
         silent execute "0,$!" . execmdline
 		" restore cursor
 		call setpos('.', current_cursor)
-        if v:shell_error != 0
+        if (v:shell_error != 0) && (v:shell_error != 2)
             " Shell command failed, so open a new buffer with error text
             execute 'normal! gg"ayG'
             silent undo
-            execute 'normal! ' . current_line . 'G'
+            " execute 'normal! ' . current_line . 'G'
             " restore cursor position
             call setpos('.', current_cursor)
             silent new
             silent put a
-        end
+
+        endif
+        echom "shell exit:" . v:shell_error
+
     endfunction
 
     command! -nargs=? -bar Yapf call Yapf(<f-args>)
